@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Cervezas</title>
+    <link rel="stylesheet" href="../css/webfront.css">
+</head>
+<body>
+    
+    <header>
+        <nav>
+            <a href="index.html" class="logo">FrontWeb</a>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="mostrar.html">Mostrar Cervezas</a></li>
+                <li><a href="añadir.html">Añadir</a></li>
+                <li><a href="editar.html">Editar</a></li>
+                <li><a href="eliminar.html">Eliminar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+        <h1>Gestión de Cervezas</h1>
+    
+
+    <main>
+        <section id="mostrar">
+            <h2>Lista de Cervezas</h2>
+            <button id="btn-mostrar">Mostrar Todas las Cervezas</button>
+            <ul id="lista-cervezas"></ul>
+
+            <h3>Buscar Cerveza por ID</h3>
+            <form id="form-mostrar-por-id">
+                <input type="number" id="id-mostrar" placeholder="ID de la Cerveza" required>
+                <button type="submit">Buscar</button>
+            </form>
+            <div id="resultado-cerveza"></div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - FrontWeb - Emilio Tamayo <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/cervezas.js"></script>
+</body>
+</html>
