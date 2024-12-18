@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Cervezas</title>
-    <link rel="stylesheet" href="../css/webfront.css">
+    <title>Eliminar Cerveza</title>
+    <link rel="stylesheet" href="css/webfront.css">
 </head>
 <body>
     
@@ -21,23 +21,58 @@
         </nav>
     </header>
 
+    <h1>Eliminar Cerveza</h1>
+    <form id="deleteCervezaForm">
+      <label for="id">ID de la Cerveza:</label>
+      <input type="number" id="id" required><br><br>
+  
+      <button type="submit">Eliminar Cerveza</button>
+    </form>
+  
+    <pre id="output"></pre> <!-- Aquí se mostrarán los resultados -->
+  
+    <script>
+      const apiBaseUrl = 'http://localhost:5259'; // URL base de la API
+      const form = document.getElementById('deleteCervezaForm');
+      const output = document.getElementById('output');
+  
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevenir la recarga de la página
+  
+        const id = document.getElementById('id').value;
+  
+        // Validar campo obligatorio
+        if (!id) {
+          output.textContent = 'El ID es obligatorio.';
+          return;
+        }
+  
+        try {
+          const response = await fetch(`${apiBaseUrl}/cervezas/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+  
+          const responseBody = await response.text(); // Capturar el cuerpo completo
+          if (!response.ok) throw new Error(`Error al eliminar la cerveza: ${response.status} - ${responseBody}`);
+  
+          console.log('Cerveza eliminada:', responseBody);
+          output.textContent = 'Cerveza eliminada con éxito: ' + responseBody;
+          form.reset(); // Limpiar el formulario
+        } catch (error) {
+          console.error('Error al conectar con la API:', error.message);
+          output.textContent = `Error al conectar con la API: ${error.message}`;
+        }
+      });
+    </script>
 
-        <h1>Gestión de Cervezas</h1>
-
-        <section id="eliminar">
-            <h2>Eliminar Cerveza</h2>
-            <form id="form-eliminar">
-                <input type="number" id="id-eliminar" placeholder="ID de la Cerveza" required>
-                <button type="submit">Eliminar</button>
-            </form>
-        </section>
-
-        <footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2024 - FrontWeb - Emilio Tamayo <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
-        </footer>
-        <script src="js/api.js"></script>
-        <script src="js/cervezas.js"></script>
-    </body>
-    </html>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - FrontWeb - Emilio Tamayo <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    
+</body>
+</html>

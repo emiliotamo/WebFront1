@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Cervezas</title>
-    <link rel="stylesheet" href="../css/webfront.css">
+    <link rel="stylesheet" href="css/webfront.css">
 </head>
 <body>
     
@@ -21,36 +21,56 @@
         </nav>
     </header>
 
+    <h1>Lista de Cervezas</h1>
+    <button id="getCervezasBtn">Obtener Cervezas</button>
+    <div id="cervezaList" class="cerveza-list"></div> <!-- Aquí se mostrarán las cervezas -->
 
-        <h1>Gestión de Cervezas</h1>
-    
-
-    <main>
-        <section id="mostrar">
-            <h2>Lista de Cervezas</h2>
-            <button id="btn-mostrar">Mostrar Todas las Cervezas</button>
-            <ul id="lista-cervezas"></ul>
-
-            <h3>Buscar Cerveza por ID</h3>
-            <form id="form-mostrar-por-id">
-                <input type="number" id="id-mostrar" placeholder="ID de la Cerveza" required>
-                <button type="submit">Buscar</button>
-            </form>
-            <div id="resultado-cerveza"></div>
-        </section>
-
-    </main>
-
-    <script src="script.js"></script>
-
+    <script>
+      const apiBaseUrl = 'http://localhost:5259'; // URL base de la API
+      const cervezaList = document.getElementById('cervezaList');
+  
+      document.getElementById('getCervezasBtn').addEventListener('click', async () => {
+        try {
+          const response = await fetch(`${apiBaseUrl}/cervezas`);
+          if (!response.ok) throw new Error('Error al obtener las cervezas');
+          const data = await response.json();
+          console.log('Datos obtenidos:', data);
+          
+          // Limpiar la lista antes de mostrar nuevas cervezas
+          cervezaList.innerHTML = '';
+  
+          // Mostrar las cervezas de forma más estética
+          data.forEach(cerveza => {
+            const card = document.createElement('div');
+            card.classList.add('cerveza-card');
+            
+            const nombre = document.createElement('h2');
+            nombre.textContent = cerveza.nombre;
+            card.appendChild(nombre);
+            
+            const graduacion = document.createElement('p');
+            graduacion.textContent = `Graduación: ${cerveza.graduacion}%`;
+            card.appendChild(graduacion);
+            
+            const pais = document.createElement('p');
+            pais.textContent = `País: ${cerveza.pais}`;
+            card.appendChild(pais);
+            
+            // Agregar la tarjeta a la lista
+            cervezaList.appendChild(card);
+          });
+  
+        } catch (error) {
+          console.error('Error al conectar con la API:', error.message);
+          cervezaList.innerHTML = 'Error al conectar con la API.';
+        }
+      });
+    </script>
 
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - FrontWeb - Emilio Tamayo <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-
-    <script src="js/api.js"></script>
-    <script src="js/cervezas.js"></script>
 </body>
 </html>

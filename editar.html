@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Cervezas</title>
-    <link rel="stylesheet" href="../css/webfront.css">
+    <title>Editar Cerveza</title>
+    <link rel="stylesheet" href="css/webfront.css">
 </head>
 <body>
     
@@ -21,26 +21,83 @@
         </nav>
     </header>
 
+    <h1>Editar Cerveza</h1>
+    <form id="editCervezaForm">
+      <label for="id">ID de la Cerveza:</label>
+      <input type="number" id="id" required><br><br>
 
-        <h1>Gestión de Cervezas</h1>
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" required><br><br>
 
-        <section id="editar">
-            <h2>Editar Cerveza</h2>
-            <form id="form-editar">
-                <input type="number" id="id-editar" placeholder="ID de la Cerveza" required>
-                <input type="text" id="nombre-editar" placeholder="Nuevo Nombre" required>
-                <input type="text" id="pais-editar" placeholder="Nuevo País" required>
-                <input type="number" id="graduacion-editar" placeholder="Nueva Graduación (%)" required>
-                <button type="submit">Editar</button>
-            </form>
-        </section>
+      <label for="graduacion">Graduación (%):</label>
+      <input type="number" step="0.1" id="graduacion" required><br><br>
 
-        <footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2024 - FrontWeb - Emilio Tamayo <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
-        </footer>
-        <script src="js/api.js"></script>
-        <script src="js/cervezas.js"></script>
-    </body>
-    </html>
+      <label for="pais">País:</label>
+      <input type="text" id="pais" required><br><br>
+  
+      <button type="submit">Editar Cerveza</button>
+    </form>
+  
+    <pre id="output"></pre> <!-- Aquí se mostrarán los resultados -->
+  
+    <script>
+     const apiBaseUrl = 'http://localhost:5259'; // URL base de la API
+const form = document.getElementById('editCervezaForm');
+const output = document.getElementById('output');
+
+form.addEventListener('submit', async (event) => {
+  event.preventDefault(); // Prevenir la recarga de la página
+
+  const id = document.getElementById('id').value; // Obtener el ID de la cerveza a editar
+  const nombre = document.getElementById('nombre').value;
+  const graduacion = document.getElementById('graduacion').value;
+  const pais = document.getElementById('pais').value;
+
+  // Validar campos obligatorios
+  if (!id || !nombre || !graduacion || !pais) {
+    output.textContent = 'Todos los campos son obligatorios.';
+    return;
+  }
+
+  // Crear el objeto con el formato esperado por la API
+  const cerveza = { 
+    iD_CERVEZA: id,  // ID de la cerveza que se va a editar
+    nombre,
+    graduacion: parseFloat(graduacion),  // Asegurarse de que sea un número flotante
+    pais
+  };
+
+  try {
+    // Hacer la solicitud PUT
+    const response = await fetch(`${apiBaseUrl}/cervezas/${id}`, {
+      method: 'PUT', // Asegúrate de que sea PUT
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(cerveza), // Enviar el objeto con todos los campos
+    });
+
+    const responseBody = await response.text(); // Obtener el cuerpo de la respuesta
+    if (!response.ok) {
+      console.error('Error al editar la cerveza:', response.status, responseBody);
+      throw new Error(`Error al editar la cerveza: ${response.status} - ${responseBody}`);
+    }
+
+    output.textContent = 'Cerveza editada con éxito: ' + responseBody;
+    form.reset(); // Limpiar el formulario
+
+  } catch (error) {
+    console.error('Error al conectar con la API:', error.message);
+    output.textContent = `Error al conectar con la API: ${error.message}`;
+  }
+});
+    </script>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - FrontWeb - Emilio Tamayo <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    
+</body>
+</html>
