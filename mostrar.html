@@ -21,25 +21,42 @@
         </nav>
     </header>
 
-    <h1>Lista de Cervezas</h1>
-    <button id="getCervezasBtn">Obtener Cervezas</button>
-    <div id="cervezaList" class="cerveza-list"></div> <!-- Aquí se mostrarán las cervezas -->
+    <h1>Gestión de Cervezas</h1>
+
+    <section>
+        <h2>Lista de Cervezas</h2>
+        <button id="getCervezasBtn">Obtener Todas las Cervezas</button>
+        <div id="cervezaList" class="cerveza-list"></div> <!-- Aquí se mostrarán todas las cervezas -->
+    </section>
+
+    <section>
+        <h2>Buscar Cerveza por ID</h2>
+        <form id="searchForm">
+            <label for="cervezaId">ID de la Cerveza:</label>
+            <input type="number" id="cervezaId" required>
+            <button type="submit">Buscar</button>
+        </form>
+        <div id="cervezaDetail" class="cerveza-card" style="display:none;"></div> <!-- Aquí se mostrará la cerveza encontrada -->
+    </section>
 
     <script>
       const apiBaseUrl = 'http://localhost:5259'; // URL base de la API
       const cervezaList = document.getElementById('cervezaList');
-  
+      const searchForm = document.getElementById('searchForm');
+      const cervezaDetail = document.getElementById('cervezaDetail');
+
+      // Obtener todas las cervezas
       document.getElementById('getCervezasBtn').addEventListener('click', async () => {
         try {
           const response = await fetch(`${apiBaseUrl}/cervezas`);
           if (!response.ok) throw new Error('Error al obtener las cervezas');
           const data = await response.json();
           console.log('Datos obtenidos:', data);
-          
+
           // Limpiar la lista antes de mostrar nuevas cervezas
           cervezaList.innerHTML = '';
-  
-          // Mostrar las cervezas de forma más estética
+
+          // Mostrar las cervezas
           data.forEach(cerveza => {
             const card = document.createElement('div');
             card.classList.add('cerveza-card');
@@ -59,10 +76,45 @@
             // Agregar la tarjeta a la lista
             cervezaList.appendChild(card);
           });
-  
+
         } catch (error) {
           console.error('Error al conectar con la API:', error.message);
           cervezaList.innerHTML = 'Error al conectar con la API.';
+        }
+      });
+
+      // Buscar cerveza por ID
+      searchForm.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevenir recarga de la página
+
+        const id = document.getElementById('cervezaId').value;
+        if (!id) return;
+
+        try {
+          const response = await fetch(`${apiBaseUrl}/cervezas/${id}`);
+          if (!response.ok) {
+            if (response.status === 404) {
+              cervezaDetail.style.display = 'none';
+              alert('No se encontró una cerveza con ese ID.');
+              return;
+            }
+            throw new Error('Error al buscar la cerveza');
+          }
+
+          const data = await response.json();
+          console.log('Cerveza encontrada:', data);
+
+          // Mostrar la cerveza encontrada
+          cervezaDetail.style.display = 'block';
+          cervezaDetail.innerHTML = `
+            <h2>${data.nombre}</h2>
+            <p>Graduación: ${data.graduacion}%</p>
+            <p>País: ${data.pais}</p>
+          `;
+
+        } catch (error) {
+          console.error('Error al conectar con la API:', error.message);
+          alert('Error al conectar con la API.');
         }
       });
     </script>

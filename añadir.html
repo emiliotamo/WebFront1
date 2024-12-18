@@ -46,7 +46,7 @@
         const cervezaCard = document.getElementById('cervezaCard');
       
         form.addEventListener('submit', async (event) => {
-          event.preventDefault(); // Prevenir la recarga de la página
+          event.preventDefault(); 
       
           const nombre = document.getElementById('nombre').value;
           const graduacion = document.getElementById('graduacion').value;
@@ -54,10 +54,10 @@
       
           // Validar campos obligatorios
           if (!nombre || !graduacion || !pais) {
-            return; // Si hay campos vacíos, no hacer nada
+            return;
           }
       
-          const cerveza = { nombre, graduacion, pais }; // No incluir idcerveza
+          const cerveza = { nombre, graduacion, pais }; 
       
           try {
             const response = await fetch(`${apiBaseUrl}/cervezas`, {
@@ -68,7 +68,7 @@
               body: JSON.stringify(cerveza),
             });
       
-            const responseBody = await response.text(); // Capturar el cuerpo completo
+            const responseBody = await response.text(); 
             if (!response.ok) throw new Error(`Error al añadir la cerveza: ${response.status} - ${responseBody}`);
       
             // Mostrar solo el div con la cerveza añadida

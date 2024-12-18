@@ -31,34 +31,34 @@ nav a {
   text-decoration: none;
   color: white;
   font-size: 1rem;
-  font-weight: 600; /* Negrita ligera para mayor claridad */
+  font-weight: 600; 
   transition: color 0.3s ease;
 }
 
 nav a:hover {
-  color: #258cfb; /* Azul al pasar el cursor */
+  color: #258cfb; 
 }
 
 
 .footer {
-  background-color: #333; /* Fondo oscuro */
-  color: white; /* Texto blanco */
-  text-align: center; /* Centra el texto */
-  padding: 10px 20px; /* Espaciado interno */
-  position: fixed; /* Fijo en la parte inferior */
-  bottom: 0; /* Posicionado al fondo */
-  width: 100%; /* Abarca todo el ancho */
-  font-size: 0.9rem; /* Tamaño de fuente un poco más pequeño */
+  background-color: #333; 
+  color: white; 
+  text-align: center; 
+  padding: 10px 20px; 
+  position: fixed; 
+  bottom: 0; 
+  width: 100%; 
+  font-size: 0.9rem; 
 }
 
 .footer a {
-  color: #258cfb; /* Color azul para enlaces */
-  text-decoration: none; /* Sin subrayado */
-  transition: color 0.3s ease; /* Transición suave al pasar el cursor */
+  color: #258cfb; 
+  text-decoration: none; 
+  transition: color 0.3s ease; 
 }
 
 .footer a:hover {
-  color: white; /* El enlace cambia a blanco al pasar el cursor */
+  color: white;
 }
 
 
