@@ -21,7 +21,6 @@
         </nav>
     </header>
 
-
     <h1>Añadir Cerveza</h1>
     <form id="addCervezaForm">
       <label for="nombre">Nombre:</label>
@@ -36,56 +35,64 @@
       <button type="submit">Añadir Cerveza</button>
     </form>
   
+    <h2>Detalles de la Cerveza Añadida:</h2>
+    <div id="cervezaCard" class="cerveza-card" style="display:none;"></div> <!-- Aquí se mostrará la cerveza añadida -->
+
     <pre id="output"></pre> <!-- Aquí se mostrarán los resultados -->
   
     <script>
-      const apiBaseUrl = 'http://localhost:5259'; // URL base de la API
-      const form = document.getElementById('addCervezaForm');
-      const output = document.getElementById('output');
-  
-      form.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Prevenir la recarga de la página
-  
-        const nombre = document.getElementById('nombre').value;
-        const graduacion = document.getElementById('graduacion').value;
-        const pais = document.getElementById('pais').value;
-  
-        // Validar campos obligatorios
-        if (!nombre || !graduacion || !pais) {
-          output.textContent = 'Todos los campos son obligatorios.';
-          return;
-        }
-  
-        const cerveza = { nombre, graduacion, pais }; // No incluir idcerveza
-  
-        try {
-          const response = await fetch(`${apiBaseUrl}/cervezas`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(cerveza),
-          });
-  
-          const responseBody = await response.text(); // Capturar el cuerpo completo
-          if (!response.ok) throw new Error(`Error al añadir la cerveza: ${response.status} - ${responseBody}`);
-  
-          const data = JSON.parse(responseBody);
-          console.log('Cerveza añadida:', data);
-          output.textContent = 'Cerveza añadida con éxito: ' + JSON.stringify(data, null, 2);
-          form.reset(); // Limpiar el formulario
-        } catch (error) {
-          console.error('Error al conectar con la API:', error.message);
-          output.textContent = `Error al conectar con la API: ${error.message}`;
-        }
-      });
-    </script>
+        const apiBaseUrl = 'http://localhost:5259'; // URL base de la API
+        const form = document.getElementById('addCervezaForm');
+        const cervezaCard = document.getElementById('cervezaCard');
+      
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault(); // Prevenir la recarga de la página
+      
+          const nombre = document.getElementById('nombre').value;
+          const graduacion = document.getElementById('graduacion').value;
+          const pais = document.getElementById('pais').value;
+      
+          // Validar campos obligatorios
+          if (!nombre || !graduacion || !pais) {
+            return; // Si hay campos vacíos, no hacer nada
+          }
+      
+          const cerveza = { nombre, graduacion, pais }; // No incluir idcerveza
+      
+          try {
+            const response = await fetch(`${apiBaseUrl}/cervezas`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(cerveza),
+            });
+      
+            const responseBody = await response.text(); // Capturar el cuerpo completo
+            if (!response.ok) throw new Error(`Error al añadir la cerveza: ${response.status} - ${responseBody}`);
+      
+            // Mostrar solo el div con la cerveza añadida
+            cervezaCard.style.display = 'block';
+            cervezaCard.innerHTML = `
+              <h2>${cerveza.nombre}</h2>
+              <p>Graduación: ${cerveza.graduacion}%</p>
+              <p>País: ${cerveza.pais}</p>
+            `;
+      
+            form.reset(); // Limpiar el formulario
+          } catch (error) {
+            console.error('Error al conectar con la API:', error.message);
+          }
+        });
+      </script>
+      
 
-        <footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2024 - FrontWeb - Emilio Tamayo <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
-        </footer>
-    
-    </body>
-    </html>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - FrontWeb - Emilio Tamayo <a href="#">Privacy</a>
+        </div>
+    </footer>
+
+</body>
+</html>
